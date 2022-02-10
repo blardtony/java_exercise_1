@@ -26,11 +26,12 @@ public class Predict implements Command{
             String word = scanner.nextLine();
             if (!tab.contains(word)) {
                 System.out.println("Le mot n'est pas présent dans le fichier");
+                scanner.close();
                 return false;
             }
 
             StringJoiner sentence = new StringJoiner(" ");
-
+            sentence.add(word);
             for (int j = 0; j < 19; j++) {
                 List<String> next = new ArrayList<String>();
                 for (int i = 0; i < tab.size() - 1; i++) {
@@ -49,11 +50,13 @@ public class Predict implements Command{
                 sentence.add(str);
                 word = str;
             }
-            System.out.println(sentence.toString());
+            System.out.println(sentence);
         } catch (IOException e) {
             System.out.println("Unreadable file: " + e.getClass() + " " + e.getMessage());
+            scanner.close();
             return false;
         }
+        scanner.close();
         return true;
     }
 }
