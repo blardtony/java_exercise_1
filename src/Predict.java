@@ -24,9 +24,9 @@ public class Predict implements Command{
 
             System.out.println("Entrer un mot");
             String word = scanner.nextLine();
+            word = word.toLowerCase(Locale.ROOT);
             if (!tab.contains(word)) {
                 System.out.println("Le mot n'est pas présent dans le fichier");
-                scanner.close();
                 return false;
             }
 
@@ -53,10 +53,8 @@ public class Predict implements Command{
             System.out.println(sentence);
         } catch (IOException e) {
             System.out.println("Unreadable file: " + e.getClass() + " " + e.getMessage());
-            scanner.close();
             return false;
         }
-        scanner.close();
         return true;
     }
 }
