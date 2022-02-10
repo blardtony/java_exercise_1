@@ -2,7 +2,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Predict implements Command{
     @Override
@@ -17,10 +19,41 @@ public class Predict implements Command{
         Path path = Paths.get(pathString);
         try {
             String text = Files.readString(path);
+            text = text.replaceAll("[.!?\\-,\\n]", " ").toLowerCase(Locale.ROOT);
+            List<String> tab = List.of(text.split(" "));
+
+            System.out.println("Entrer un mot");
+            String word = scanner.nextLine();
+            if (!tab.contains(word)) {
+                System.out.println("Le mot n'est pas présent dans le fichier");
+                return false;
+            }
+
+            StringJoiner sentence = new StringJoiner(" ");
+
+            for (int j = 0; j < 19; j++) {
+                List<String> next = new ArrayList<String>();
+                for (int i = 0; i < tab.size() - 1; i++) {
+                    if (tab.get(i).equals(word)) {
+                        next.add(tab.get(i + 1));
+                    }
+                }
+
+                Map<String, Long> next_list = next.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                Map<String, Long> result = next_list.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .limit(1)
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+                List<String> list3 = new ArrayList<>(result.keySet());
+                String str = list3.get(0);
+                sentence.add(str);
+                word = str;
+            }
+            System.out.println(sentence.toString());
         } catch (IOException e) {
             System.out.println("Unreadable file: " + e.getClass() + " " + e.getMessage());
             return false;
         }
-        return false;
+        return true;
     }
 }
