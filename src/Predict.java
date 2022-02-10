@@ -15,12 +15,11 @@ public class Predict implements Command{
     @Override
     public boolean run(Scanner scanner) {
         System.out.println("Entrer le chemin du fichier");
-
+        String pathString = "";
 
         try {
-            String pathString = scanner.nextLine();
-            Path path = Paths.get(pathString);
-            String text = Files.readString(path);
+            pathString = scanner.nextLine();
+            String text = Files.readString(Paths.get(pathString));
             text = text.replaceAll("[.!?\\-,\\n]", " ").toLowerCase(Locale.ROOT);
             List<String> tab = List.of(text.split(" "));
 
