@@ -15,9 +15,11 @@ public class Predict implements Command{
     @Override
     public boolean run(Scanner scanner) {
         System.out.println("Entrer le chemin du fichier");
-        String pathString = scanner.nextLine();
-        Path path = Paths.get(pathString);
+
+
         try {
+            String pathString = scanner.nextLine();
+            Path path = Paths.get(pathString);
             String text = Files.readString(path);
             text = text.replaceAll("[.!?\\-,\\n]", " ").toLowerCase(Locale.ROOT);
             List<String> tab = List.of(text.split(" "));
@@ -25,6 +27,7 @@ public class Predict implements Command{
             System.out.println("Entrer un mot");
             String word = scanner.nextLine();
             word = word.toLowerCase(Locale.ROOT);
+
             if (!tab.contains(word)) {
                 System.out.println("Le mot n'est pas présent dans le fichier");
                 return false;
