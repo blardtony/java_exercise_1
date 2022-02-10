@@ -16,8 +16,9 @@ public class Launcher {
         commands.add(new Fibo());
         commands.add(new Freq());
         commands.add(new Quit());
-
-        while (true) {
+        commands.add(new Predict());
+        boolean isRunning = false;
+        while (!isRunning) {
             System.out.println("Entrer commande :");
             String input = scanner.nextLine();
             Command command = commands.stream().filter(cmd -> input.equals(cmd.name())).findAny().orElse(null);
@@ -26,10 +27,7 @@ public class Launcher {
                 System.out.println("Unknown command");
             }
             else {
-                boolean isRunning = command.run(scanner);
-                if (isRunning && command.name().equals("quit")) {
-                    break;
-                }
+                isRunning = command.run(scanner);
             }
         }
         scanner.close();

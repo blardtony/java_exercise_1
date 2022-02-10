@@ -18,13 +18,8 @@ public class Freq implements Command{
         System.out.println("Entrer le chemin du fichier");
         String pathString = scanner.nextLine();
         Path path = Paths.get(pathString);
-        String text = "";
-        if (!Files.exists(path)) {
-            System.out.println("Unreadable file: ");
-            return false;
-        }
         try {
-            text = Files.readString(path);
+            String text = Files.readString(path);
             text = text.replaceAll("[.!?\\-,\\n]", " ").toLowerCase(Locale.ROOT);
             List<String> tab = List.of(text.split(" "));
             Map<String, Long> list = tab.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -38,6 +33,7 @@ public class Freq implements Command{
             System.out.println(res);
 
         } catch (IOException e) {
+            System.out.println("Unreadable file: " + e.getClass() + " " + e.getMessage());
             return false;
         }
         return true;
